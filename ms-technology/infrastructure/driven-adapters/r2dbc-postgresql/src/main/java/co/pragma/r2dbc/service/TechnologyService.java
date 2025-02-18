@@ -19,19 +19,23 @@ public class TechnologyService implements TechnologyGateway {
         return technologyRepository.findByName(name).map(technologyMapper::toEntity);
     }
 
-    public Mono<Technology> save(Technology technology) {
+    @Override
+    public Mono<Technology> saveTechnology(Technology technology) {
         return technologyRepository.save(technologyMapper.toDto(technology)).map(technologyMapper::toEntity);
     }
 
-    public Flux<Technology> getAll() {
+    @Override
+    public Flux<Technology> getAllTechnologies() {
         return technologyRepository.findAll().map(technologyMapper::toEntity);
     }
 
-    public Mono<Technology> getById(Long id) {
+    @Override
+    public Mono<Technology> getTechnologyById(Long id) {
         return technologyRepository.findById(id).map(technologyMapper::toEntity);
     }
 
-    public Mono<Void> deleteById(Long id) {
+    @Override
+    public Mono<Void> deleteTechnologyById(Long id) {
         return technologyRepository.deleteById(id);
     }
 }

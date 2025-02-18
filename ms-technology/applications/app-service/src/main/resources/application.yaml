@@ -6,7 +6,7 @@ spring:
   devtools:
     add-properties: false
   r2dbc:
-    url: "r2dbc:postgresql://localhost:5432/ms-technology"
+    url: "r2dbc:postgresql://localhost:5432/simuladores-back-test?currentSchema=ms_technology"
     username: "postgres"
     password: "root"
   sql:
@@ -34,4 +34,4 @@ management:
     web:
       exposure:
         include: health
-      base-path: /api/auto
+      base-path: /api/info
