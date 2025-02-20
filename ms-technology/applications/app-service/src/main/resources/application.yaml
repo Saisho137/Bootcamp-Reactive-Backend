@@ -6,7 +6,7 @@ spring:
   devtools:
     add-properties: false
   r2dbc:
-    url: "r2dbc:postgresql://localhost:5432/simuladores-back-test?currentSchema=ms_technology"
+    url: "r2dbc:postgresql://localhost:5432/reactive_backend?currentSchema=ms_technology"
     username: "postgres"
     password: "root"
   sql:
@@ -14,10 +14,6 @@ spring:
       mode: "always"
   main:
     web-application-type: "reactive"
-  h2:
-    console:
-      enabled: true
-      path: "/h2"
 logging:
   level:
     org.springframework.r2dbc: "DEBUG"
