@@ -9,7 +9,7 @@ public interface TechnologyGateway {
 
     Mono<Technology> saveTechnology(Technology technology);
 
-    Flux<Technology> getAllTechnologies();
+    Flux<Technology> getAllTechnologies(String sort);
 
     Mono<Technology> getTechnologyById(Long id);
 
