@@ -3,20 +3,17 @@ package co.pragma.api;
 import co.pragma.model.entity.Technology;
 import co.pragma.model.utils.output.OutputObjectApi;
 import co.pragma.usecase.TechnologyUseCase;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/technology")
 public class TechnologyController {
-    TechnologyUseCase technologyUseCase;
-
-    public TechnologyController(TechnologyUseCase technologyUseCase) {
-        this.technologyUseCase = technologyUseCase;
-    }
+    private final TechnologyUseCase technologyUseCase;
 
     @PostMapping(value = "/save-technology")
     public Mono<OutputObjectApi<Technology>> saveTechnology(@RequestBody Technology technology) {
