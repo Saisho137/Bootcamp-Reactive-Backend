@@ -35,4 +35,17 @@ public abstract class AbstractOutputObjectApi<T> {
                 .payload(payload)
                 .build();
     }
+
+    public OutputObjectApi<T> createErrorResponse(String status, String message) {
+        OutputHeader header = OutputHeader.builder()
+                .status(status)
+                .message(message)
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .build();
+
+        return OutputObjectApi.<T>builder()
+                .header(header)
+                .payload(null)
+                .build();
+    }
 }
