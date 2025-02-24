@@ -1,7 +1,12 @@
 package co.pragma.usecase;
 
 import co.pragma.logic.TechnologyCapacityGateway;
+import co.pragma.logic.TechnologyGateway;
+import co.pragma.model.entity.Technology;
 import co.pragma.model.entity.TechnologyCapacity;
+import co.pragma.model.exceptions.TechnologiesAmountException;
+import co.pragma.model.exceptions.TechnologiesDuplicatedException;
+import co.pragma.model.exceptions.TechnologiesNotFoundException;
 import co.pragma.model.integration.input.TechnologyCapacityRequest;
 import co.pragma.model.utils.output.AbstractOutputObjectApi;
 import co.pragma.model.utils.output.OutputObjectApi;
@@ -15,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TechnologyCapacityUseCase extends AbstractOutputObjectApi<TechnologyCapacity> {
     private final TechnologyCapacityGateway technologyCapacityGateway;
+    private final TechnologyGateway technologyGateway;
 
     public Mono<OutputObjectApi<List<TechnologyCapacity>>> saveTechnologyCapacityBatch(TechnologyCapacityRequest request) {
         List<Long> uniqueTechnologyIds = request.getTechnologyIds().stream()
@@ -22,31 +28,45 @@ public class TechnologyCapacityUseCase extends AbstractOutputObjectApi<Technolog
                 .toList();
 
         if (uniqueTechnologyIds.size() < 3 || uniqueTechnologyIds.size() > 20) {
-            return Mono.just(createOutputObjectApiList(null, "400", "Debe haber entre 3 y 20 tecnologías únicas."));
+            return Mono.error(new TechnologiesAmountException("Deben haber entre 3 y 20 tecnologías."));
         }
 
-        return technologyCapacityGateway.getByCapacityId(request.getCapacityId())
-                .collectList()
-                .flatMap(existingTechnologies -> {
-                    Set<Long> existingTechIds = existingTechnologies.stream()
-                            .map(TechnologyCapacity::getTechnologyId)
-                            .collect(Collectors.toSet());
-
-                    List<TechnologyCapacity> newTechnologies = uniqueTechnologyIds.stream()
-                            .filter(techId -> !existingTechIds.contains(techId))
-                            .map(techId -> TechnologyCapacity.builder()
-                                    .technologyId(techId)
-                                    .capacityId(request.getCapacityId())
-                                    .build())
+        return technologyGateway.getAllTechnologiesByIds(uniqueTechnologyIds)
+                .map(Technology::getId).collectList()
+                .flatMap(existingIds -> {
+                    List<Long> missingIds = uniqueTechnologyIds.stream()
+                            .filter(id -> !existingIds.contains(id))
                             .toList();
 
-                    if (newTechnologies.isEmpty()) {
-                        return Mono.just(createOutputObjectApiList(null, "409", "Todas las tecnologías ya están registradas."));
+                    if (!missingIds.isEmpty()) {
+                        return Mono.error(
+                                new TechnologiesNotFoundException("Los siguientes IDs de tecnología no existen: " + missingIds)
+                        );
                     }
 
-                    return technologyCapacityGateway.saveAll(newTechnologies)
+                    return technologyCapacityGateway.getByCapacityId(request.getCapacityId())
                             .collectList()
-                            .map(savedEntities -> createOutputObjectApiList(savedEntities, "200", "Guardado exitosamente."));
+                            .flatMap(existingTechnologies -> {
+                                Set<Long> existingTechIds = existingTechnologies.stream()
+                                        .map(TechnologyCapacity::getTechnologyId)
+                                        .collect(Collectors.toSet());
+
+                                List<TechnologyCapacity> newTechnologies = uniqueTechnologyIds.stream()
+                                        .filter(techId -> !existingTechIds.contains(techId))
+                                        .map(techId -> TechnologyCapacity.builder()
+                                                .technologyId(techId)
+                                                .capacityId(request.getCapacityId())
+                                                .build())
+                                        .toList();
+
+                                if (newTechnologies.isEmpty()) {
+                                    return Mono.error(new TechnologiesDuplicatedException("No se pueden guardar los datos, ya se han agregado las tecnologías seleccionadas."));
+                                }
+
+                                return technologyCapacityGateway.saveAll(newTechnologies)
+                                        .collectList()
+                                        .map(savedEntities -> createOutputObjectApiList(savedEntities, "200", "Guardado exitosamente."));
+                            });
                 });
     }
 

@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class TechnologyService implements TechnologyGateway {
     private final TechnologyRepository technologyRepository;
@@ -18,6 +20,11 @@ public class TechnologyService implements TechnologyGateway {
     @Override
     public Mono<Technology> getTechnologyByName(String name) {
         return technologyRepository.findByName(name).map(technologyMapper::toEntity);
+    }
+
+    @Override
+    public Flux<Technology> getAllTechnologiesByIds(List<Long> ids) {
+        return technologyRepository.findAllById(ids).map(technologyMapper::toEntity);
     }
 
     @Override

@@ -21,8 +21,8 @@ public class UseCasesConfig {
         return new TechnologyUseCase(technologyGateway);
     }
     @Bean
-    public TechnologyCapacityUseCase technologyCapacityUseCase(TechnologyCapacityGateway technologyCapacityGateway) {
-        return new TechnologyCapacityUseCase(technologyCapacityGateway);
+    public TechnologyCapacityUseCase technologyCapacityUseCase(TechnologyCapacityGateway technologyCapacityGateway, TechnologyGateway technologyGateway) {
+        return new TechnologyCapacityUseCase(technologyCapacityGateway, technologyGateway);
     }
 
     @Bean
