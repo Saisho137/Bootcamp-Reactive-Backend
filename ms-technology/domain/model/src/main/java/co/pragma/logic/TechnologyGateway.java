@@ -13,7 +13,9 @@ public interface TechnologyGateway {
 
     Mono<Technology> saveTechnology(Technology technology);
 
-    Flux<Technology> getAllTechnologies(String sort);
+    Flux<Technology> getAllTechnologies(int page, int size,String sort);
+
+    Mono<Long> countAllTechnologies();
 
     Mono<Technology> getTechnologyById(Long id);
 

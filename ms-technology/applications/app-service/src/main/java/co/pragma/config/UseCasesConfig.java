@@ -1,5 +1,6 @@
 package co.pragma.config;
 
+import co.pragma.api.handlers.TechnologyHandler;
 import co.pragma.logic.TechnologyCapacityGateway;
 import co.pragma.logic.TechnologyGateway;
 import co.pragma.r2dbc.mapper.TechnologyCapacityMapper;
@@ -20,9 +21,15 @@ public class UseCasesConfig {
     public TechnologyUseCase technologyUseCase(TechnologyGateway technologyGateway) {
         return new TechnologyUseCase(technologyGateway);
     }
+
     @Bean
     public TechnologyCapacityUseCase technologyCapacityUseCase(TechnologyCapacityGateway technologyCapacityGateway, TechnologyGateway technologyGateway) {
         return new TechnologyCapacityUseCase(technologyCapacityGateway, technologyGateway);
+    }
+
+    @Bean
+    public TechnologyHandler technologyHandler(TechnologyUseCase technologyUseCase) {
+        return new TechnologyHandler(technologyUseCase);
     }
 
     @Bean

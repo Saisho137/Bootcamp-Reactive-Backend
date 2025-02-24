@@ -6,6 +6,7 @@ import co.pragma.model.entity.Technology;
 import co.pragma.r2dbc.mapper.TechnologyMapper;
 import co.pragma.r2dbc.repository.TechnologyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -33,11 +34,17 @@ public class TechnologyService implements TechnologyGateway {
     }
 
     @Override
-    public Flux<Technology> getAllTechnologies(String sort) {
-        return technologyRepository.findAll(Sort.by(sort.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "name"))
-                .map(technologyMapper::toEntity);
+    public Flux<Technology> getAllTechnologies(int page, int size,String sort) {
+        Sort.Direction direction = sort.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(direction, "name"));
+
+        return technologyRepository.findAllBy(pageRequest).map(technologyMapper::toEntity);
     }
 
+    @Override
+    public Mono<Long> countAllTechnologies() {
+        return technologyRepository.count();
+    }
 
     @Override
     public Mono<Technology> getTechnologyById(Long id) {

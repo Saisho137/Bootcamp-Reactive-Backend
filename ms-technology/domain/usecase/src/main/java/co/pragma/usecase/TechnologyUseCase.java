@@ -6,6 +6,7 @@ import co.pragma.model.utils.output.AbstractOutputObjectApi;
 import co.pragma.model.utils.output.OutputObjectApi;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.util.List;
 
@@ -25,15 +26,10 @@ public class TechnologyUseCase extends AbstractOutputObjectApi<Technology> {
                 .defaultIfEmpty(createOutputObjectApi(null, "500", "No se pudo guardar la tecnología"));
     }
 
-    public Mono<OutputObjectApi<List<Technology>>> getAllTechnologies(String sort) {
-            return technologyGateway.getAllTechnologies(sort)
-                    .collectList()
-                    .map(technologies -> createOutputObjectApiList(
-                            technologies, "200", "Consulta exitosa"
-                    ))
-                    .defaultIfEmpty(createOutputObjectApiList(
-                            List.of(), "404", "No se encontraron tecnologías"
-                    ));
+    public Mono<Tuple2<List<Technology>, Long>> getAllTechnologies(int page, int size, String sort) {
+        Mono<List<Technology>> technologies = technologyGateway.getAllTechnologies(page, size, sort).collectList();
+        Mono<Long> totalElements = technologyGateway.countAllTechnologies();
 
+        return Mono.zip(technologies, totalElements);
     }
 }
