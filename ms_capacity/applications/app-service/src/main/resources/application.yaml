@@ -1,0 +1,9 @@
+server:
+  port: 8444
+spring:
+  application:
+    name: "ms-technology"
+  devtools:
+    add-properties: false
+  main:
+    web-application-type: "reactive"
