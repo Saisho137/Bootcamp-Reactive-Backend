@@ -25,4 +25,9 @@ public class TechnologyCapacityController {
     public Mono<OutputObjectApi<List<TechnologyCapacity>>> getByCapacityId(@RequestParam(value = "capacityId") Long capacityId) {
         return technologyCapacityUseCase.getByCapacityId(capacityId);
     }
+
+    @GetMapping(value = "/get-technologies-by-capacity-id")
+    public Mono<List<Long>> getTechnologiesByCapacityId(@RequestParam(value = "capacityId") Long capacityId) {
+        return technologyCapacityUseCase.getTechnologiesByCapacityId(capacityId);
+    }
 }

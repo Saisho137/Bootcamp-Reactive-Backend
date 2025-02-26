@@ -75,4 +75,8 @@ public class TechnologyCapacityUseCase extends AbstractOutputObjectApi<Technolog
                 .map(technologyCapacityList -> createOutputObjectApiList(technologyCapacityList, "200", "Obtenido exitosamente."))
                 .defaultIfEmpty(createOutputObjectApiList(List.of(), "500", "No se pudo obtener el registro"));
     }
+
+    public Mono<List<Long>> getTechnologiesByCapacityId (Long capacityId) {
+        return technologyCapacityGateway.getTechnologiesByCapacityId(capacityId).collectList();
+    }
 }

@@ -10,7 +10,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class TechnologyCapacityService implements TechnologyCapacityGateway {
@@ -36,4 +35,10 @@ public class TechnologyCapacityService implements TechnologyCapacityGateway {
     public Flux<TechnologyCapacity> getByCapacityId(Long capacityId) {
         return technologyCapacityRepository.findByCapacityId(capacityId).map(technologyCapacityMapper::toEntity);
     }
+
+    @Override
+    public Flux<Long> getTechnologiesByCapacityId(Long capacityId) {
+        return technologyCapacityRepository.findByCapacityId(capacityId).map(TechnologyCapacityDTO::getTechnologyId);
+    }
+
 }

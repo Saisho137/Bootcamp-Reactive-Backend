@@ -12,4 +12,6 @@ public interface TechnologyCapacityGateway {
     Flux<TechnologyCapacity> saveAll(List<TechnologyCapacity> technologyCapacities);
 
     Flux<TechnologyCapacity> getByCapacityId(Long capacityId);
+
+    Flux<Long> getTechnologiesByCapacityId(Long capacityId);
 }
