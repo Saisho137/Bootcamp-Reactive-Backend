@@ -1,4 +1,4 @@
-package co.pragma.utils.output;
+package co.pragma.utils.output_object;
 
 
 import lombok.Getter;

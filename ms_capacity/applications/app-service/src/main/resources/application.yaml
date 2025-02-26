@@ -17,6 +17,7 @@ spring:
 logging:
   level:
     org.springframework.r2dbc: "DEBUG"
+    web: "DEBUG"
 management:
   endpoints:
     web:
