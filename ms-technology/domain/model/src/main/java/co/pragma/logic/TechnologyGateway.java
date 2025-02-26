@@ -17,6 +17,8 @@ public interface TechnologyGateway {
 
     Mono<Long> countAllTechnologies();
 
+    Mono<Boolean> confirmTechnologies(List<Long> technologyIds);
+
     Mono<Technology> getTechnologyById(Long id);
 
     Mono<Void> deleteTechnologyById(Long id);

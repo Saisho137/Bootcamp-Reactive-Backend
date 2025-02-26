@@ -34,7 +34,7 @@ public class TechnologyService implements TechnologyGateway {
     }
 
     @Override
-    public Flux<Technology> getAllTechnologies(int page, int size,String sort) {
+    public Flux<Technology> getAllTechnologies(int page, int size, String sort) {
         Sort.Direction direction = sort.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(direction, "name"));
 
@@ -44,6 +44,11 @@ public class TechnologyService implements TechnologyGateway {
     @Override
     public Mono<Long> countAllTechnologies() {
         return technologyRepository.count();
+    }
+
+    @Override
+    public Mono<Boolean> confirmTechnologies(List<Long> technologyIds) {
+        return technologyRepository.findAllById(technologyIds).count().map(count -> count == technologyIds.size());
     }
 
     @Override

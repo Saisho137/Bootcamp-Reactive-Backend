@@ -2,6 +2,7 @@ package co.pragma.usecase;
 
 import co.pragma.logic.TechnologyGateway;
 import co.pragma.model.entity.Technology;
+import co.pragma.model.integration.input.TechnologyIds;
 import co.pragma.model.utils.output.AbstractOutputObjectApi;
 import co.pragma.model.utils.output.OutputObjectApi;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,9 @@ public class TechnologyUseCase extends AbstractOutputObjectApi<Technology> {
         Mono<Long> totalElements = technologyGateway.countAllTechnologies();
 
         return Mono.zip(technologies, totalElements);
+    }
+
+    public Mono<Boolean> confirmTechnologies(TechnologyIds technologyIds) {
+        return technologyGateway.confirmTechnologies(technologyIds.getIds());
     }
 }

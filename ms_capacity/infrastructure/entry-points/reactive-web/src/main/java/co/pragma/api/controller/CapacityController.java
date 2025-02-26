@@ -3,6 +3,7 @@ package co.pragma.api.controller;
 import co.pragma.api.handler.CapacityHandler;
 import co.pragma.api.handler.CapacityPaginatedHandler;
 import co.pragma.model.capacity.Capacity;
+import co.pragma.technology.TechnologyService;
 import co.pragma.utils.integration.input.CapacityRequest;
 import co.pragma.utils.integration.output.CapacityPaginated;
 import co.pragma.utils.output_object.OutputObjectApi;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Mono;
 public class CapacityController {
     private final CapacityHandler capacityHandler;
     private final CapacityPaginatedHandler capacityPaginatedHandler;
+    private final TechnologyService technologyService;
 
     @GetMapping(value = "/get-all-capacities")
     public Mono<OutputObjectApi<CapacityPaginated>> getAllTechnologies(

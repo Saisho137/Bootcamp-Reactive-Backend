@@ -2,6 +2,7 @@ package co.pragma.api;
 
 import co.pragma.api.handlers.TechnologyHandler;
 import co.pragma.model.entity.Technology;
+import co.pragma.model.integration.input.TechnologyIds;
 import co.pragma.model.integration.output.TechnologyPaginated;
 import co.pragma.model.utils.output.OutputObjectApi;
 import co.pragma.usecase.TechnologyUseCase;
@@ -33,6 +34,11 @@ public class TechnologyController {
             @RequestParam(value = "sort", defaultValue = "asc") String sort) {
 
         return technologyHandler.getAllTechnologies(page, size, sort);
+    }
+
+    @PostMapping(value = "/verify-technologies")
+    public Mono<Boolean> verifyTechnologies(@RequestBody TechnologyIds technologyIds) {
+        return technologyUseCase.confirmTechnologies(technologyIds);
     }
 
 }
