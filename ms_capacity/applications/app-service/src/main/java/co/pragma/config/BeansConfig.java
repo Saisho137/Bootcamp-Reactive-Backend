@@ -3,13 +3,16 @@ package co.pragma.config;
 import co.pragma.api.handler.CapacityHandler;
 import co.pragma.api.handler.CapacityPaginatedHandler;
 import co.pragma.model.capacity.gateway.CapacityGateway;
+import co.pragma.model.technology_capacity.gateway.TechnologyCapacityGateway;
 import co.pragma.r2dbc.mapper.CapacityMapper;
 import co.pragma.r2dbc.mapper.CapacityMapperI;
 import co.pragma.r2dbc.repository.CapacityRepository;
 import co.pragma.r2dbc.service.CapacityService;
+import co.pragma.technology.TechnologyService;
 import co.pragma.usecase.CapacityUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class BeansConfig {
@@ -19,8 +22,13 @@ public class BeansConfig {
     }
 
     @Bean
-    public CapacityUseCase capacityUseCase(CapacityGateway capacityGateway) {
-        return new CapacityUseCase(capacityGateway);
+    public TechnologyCapacityGateway technologyCapacityGateway(WebClient webClient) {
+        return new TechnologyService(webClient);
+    }
+
+    @Bean
+    public CapacityUseCase capacityUseCase(CapacityGateway capacityGateway, TechnologyCapacityGateway technologyCapacityGateway) {
+        return new CapacityUseCase(capacityGateway, technologyCapacityGateway);
     }
 
     @Bean

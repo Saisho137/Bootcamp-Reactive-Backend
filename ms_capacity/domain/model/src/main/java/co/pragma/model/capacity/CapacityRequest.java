@@ -1,4 +1,4 @@
-package co.pragma.utils.integration.input;
+package co.pragma.model.capacity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
