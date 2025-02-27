@@ -12,6 +12,7 @@ import co.pragma.model.integration.input.TechnologyCapacityRequest;
 import co.pragma.model.utils.output.AbstractOutputObjectApi;
 import co.pragma.model.utils.output.OutputObjectApi;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -77,7 +78,7 @@ public class TechnologyCapacityUseCase extends AbstractOutputObjectApi<Technolog
                 .defaultIfEmpty(createOutputObjectApiList(List.of(), "500", "No se pudo obtener el registro"));
     }
 
-    public Mono<List<TechnologyIdName>> getTechnologiesByCapacityId (Long capacityId) {
-        return technologyCapacityGateway.getTechnologiesByCapacityId(capacityId).collectList();
+    public Flux<TechnologyIdName> getTechnologiesByCapacityId (Long capacityId) {
+        return technologyCapacityGateway.getTechnologiesByCapacityId(capacityId);
     }
 }

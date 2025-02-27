@@ -7,6 +7,7 @@ import co.pragma.model.utils.output.OutputObjectApi;
 import co.pragma.usecase.TechnologyCapacityUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class TechnologyCapacityController {
     }
 
     @GetMapping(value = "/get-technologies-by-capacity-id")
-    public Mono<List<TechnologyIdName>> getTechnologiesByCapacityId(@RequestParam(value = "capacityId") Long capacityId) {
+    public Flux<TechnologyIdName> getTechnologiesByCapacityId(@RequestParam(value = "capacityId") Long capacityId) {
         return technologyCapacityUseCase.getTechnologiesByCapacityId(capacityId);
     }
 }
