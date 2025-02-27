@@ -48,7 +48,7 @@ public class UseCasesConfig {
     }
 
     @Bean
-    public TechnologyCapacityGateway technologyCapacityGateway(TechnologyCapacityRepository technologyCapacityRepository, TechnologyCapacityMapper technologyCapacityMapper) {
-        return new TechnologyCapacityService(technologyCapacityRepository, technologyCapacityMapper);
+    public TechnologyCapacityGateway technologyCapacityGateway(TechnologyCapacityRepository technologyCapacityRepository, TechnologyRepository technologyRepository, TechnologyCapacityMapper technologyCapacityMapper) {
+        return new TechnologyCapacityService(technologyCapacityRepository, technologyRepository, technologyCapacityMapper);
     }
 }

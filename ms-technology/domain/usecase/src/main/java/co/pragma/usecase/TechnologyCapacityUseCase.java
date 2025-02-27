@@ -4,6 +4,7 @@ import co.pragma.logic.TechnologyCapacityGateway;
 import co.pragma.logic.TechnologyGateway;
 import co.pragma.model.entity.Technology;
 import co.pragma.model.entity.TechnologyCapacity;
+import co.pragma.model.entity.TechnologyIdName;
 import co.pragma.model.exceptions.TechnologiesAmountException;
 import co.pragma.model.exceptions.TechnologiesDuplicatedException;
 import co.pragma.model.exceptions.TechnologiesNotFoundException;
@@ -76,7 +77,7 @@ public class TechnologyCapacityUseCase extends AbstractOutputObjectApi<Technolog
                 .defaultIfEmpty(createOutputObjectApiList(List.of(), "500", "No se pudo obtener el registro"));
     }
 
-    public Mono<List<Long>> getTechnologiesByCapacityId (Long capacityId) {
+    public Mono<List<TechnologyIdName>> getTechnologiesByCapacityId (Long capacityId) {
         return technologyCapacityGateway.getTechnologiesByCapacityId(capacityId).collectList();
     }
 }

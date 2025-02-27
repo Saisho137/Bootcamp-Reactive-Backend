@@ -2,9 +2,10 @@ package co.pragma.r2dbc.service;
 
 import co.pragma.logic.TechnologyCapacityGateway;
 import co.pragma.model.entity.TechnologyCapacity;
-import co.pragma.r2dbc.dto.TechnologyCapacityDTO;
+import co.pragma.model.entity.TechnologyIdName;
 import co.pragma.r2dbc.mapper.TechnologyCapacityMapper;
 import co.pragma.r2dbc.repository.TechnologyCapacityRepository;
+import co.pragma.r2dbc.repository.TechnologyRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TechnologyCapacityService implements TechnologyCapacityGateway {
     private final TechnologyCapacityRepository technologyCapacityRepository;
+    private final TechnologyRepository technologyRepository;
     private final TechnologyCapacityMapper technologyCapacityMapper;
 
     @Override
@@ -37,8 +39,15 @@ public class TechnologyCapacityService implements TechnologyCapacityGateway {
     }
 
     @Override
-    public Flux<Long> getTechnologiesByCapacityId(Long capacityId) {
-        return technologyCapacityRepository.findByCapacityId(capacityId).map(TechnologyCapacityDTO::getTechnologyId);
+    public Flux<TechnologyIdName> getTechnologiesByCapacityId(Long capacityId) {
+        return technologyCapacityRepository.findByCapacityId(capacityId).flatMap(technologyDto ->
+                technologyRepository.findById(technologyDto.getTechnologyId()).map(technology ->
+                        TechnologyIdName.builder()
+                                .id(technology.getId())
+                                .name(technology.getName())
+                                .build()
+                )
+        );
     }
 
 }

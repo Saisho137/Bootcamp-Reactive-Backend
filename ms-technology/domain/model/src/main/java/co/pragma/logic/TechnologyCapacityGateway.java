@@ -1,6 +1,7 @@
 package co.pragma.logic;
 
 import co.pragma.model.entity.TechnologyCapacity;
+import co.pragma.model.entity.TechnologyIdName;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -13,5 +14,5 @@ public interface TechnologyCapacityGateway {
 
     Flux<TechnologyCapacity> getByCapacityId(Long capacityId);
 
-    Flux<Long> getTechnologiesByCapacityId(Long capacityId);
+    Flux<TechnologyIdName> getTechnologiesByCapacityId(Long capacityId);
 }

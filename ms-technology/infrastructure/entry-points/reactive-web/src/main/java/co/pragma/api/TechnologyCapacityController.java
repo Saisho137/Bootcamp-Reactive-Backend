@@ -1,6 +1,7 @@
 package co.pragma.api;
 
 import co.pragma.model.entity.TechnologyCapacity;
+import co.pragma.model.entity.TechnologyIdName;
 import co.pragma.model.integration.input.TechnologyCapacityRequest;
 import co.pragma.model.utils.output.OutputObjectApi;
 import co.pragma.usecase.TechnologyCapacityUseCase;
@@ -27,7 +28,7 @@ public class TechnologyCapacityController {
     }
 
     @GetMapping(value = "/get-technologies-by-capacity-id")
-    public Mono<List<Long>> getTechnologiesByCapacityId(@RequestParam(value = "capacityId") Long capacityId) {
+    public Mono<List<TechnologyIdName>> getTechnologiesByCapacityId(@RequestParam(value = "capacityId") Long capacityId) {
         return technologyCapacityUseCase.getTechnologiesByCapacityId(capacityId);
     }
 }
