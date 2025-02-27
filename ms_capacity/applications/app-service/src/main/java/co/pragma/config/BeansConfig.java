@@ -2,6 +2,7 @@ package co.pragma.config;
 
 import co.pragma.api.handler.CapacityHandler;
 import co.pragma.api.handler.CapacityPaginatedHandler;
+import co.pragma.api.handler.CapacityTechnologiesPaginatedHandler;
 import co.pragma.model.capacity.gateway.CapacityGateway;
 import co.pragma.model.technology_capacity.gateway.TechnologyCapacityGateway;
 import co.pragma.r2dbc.mapper.CapacityMapper;
@@ -39,6 +40,11 @@ public class BeansConfig {
     @Bean
     public CapacityPaginatedHandler capacityPaginatedHandlerHandler(CapacityUseCase capacityUseCase) {
         return new CapacityPaginatedHandler(capacityUseCase);
+    }
+
+    @Bean
+    public CapacityTechnologiesPaginatedHandler capacityTechnologiesPaginatedHandler(CapacityUseCase capacityUseCase) {
+        return new CapacityTechnologiesPaginatedHandler(capacityUseCase);
     }
 
     @Bean

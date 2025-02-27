@@ -11,6 +11,8 @@ public interface CapacityGateway {
 
     Flux<Capacity> getAllCapacity(int page, int size, String sort);
 
+    Flux<Capacity> getAllCapacityWithTechnologies(int page, int size, String sort, String sortBy);
+
     Mono<Capacity> getCapacityByName(String name);
 
     Mono<Capacity> saveCapacity(Capacity capacity);

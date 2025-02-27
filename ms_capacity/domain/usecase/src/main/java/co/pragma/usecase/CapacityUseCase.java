@@ -4,6 +4,7 @@ import co.pragma.exceptions.TechnologiesNotFoundException;
 import co.pragma.model.capacity.Capacity;
 import co.pragma.model.capacity.CapacityRequest;
 import co.pragma.model.capacity.gateway.CapacityGateway;
+import co.pragma.model.technology_capacity.CapacityWithTechnologies;
 import co.pragma.model.technology_capacity.TechnologyIds;
 import co.pragma.model.technology_capacity.gateway.TechnologyCapacityGateway;
 import reactor.core.publisher.Flux;
@@ -22,6 +23,23 @@ public class CapacityUseCase {
 
     public Flux<Capacity> getAllCapacity(int page, int size, String sort) {
         return capacityGateway.getAllCapacity(page, size, sort);
+    }
+
+    public Flux<CapacityWithTechnologies> getAllCapacityWithTechnologies(int page, int size, String sort, String sortBy) {
+        return capacityGateway.getAllCapacityWithTechnologies(page, size, sort, sortBy)
+                .flatMap(pagedResponse ->
+                        technologyCapacityGateway.getTechnologiesByCapacityId(pagedResponse.getId()).collectList()
+                                .map(technologies -> CapacityWithTechnologies.builder()
+                                        .capacity(Capacity.builder()
+                                                .id(pagedResponse.getId())
+                                                .name(pagedResponse.getName())
+                                                .description(pagedResponse.getDescription())
+                                                .technologyCount(pagedResponse.getTechnologyCount())
+                                                .build())
+                                        .technologies(technologies)
+                                        .build()
+                                )
+                );
     }
 
     public Flux<Capacity> getAllCapacityByIds(List<Long> ids) {

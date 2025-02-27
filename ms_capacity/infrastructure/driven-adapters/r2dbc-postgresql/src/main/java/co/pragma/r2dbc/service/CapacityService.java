@@ -31,6 +31,15 @@ public class CapacityService implements CapacityGateway {
     }
 
     @Override
+    public Flux<Capacity> getAllCapacityWithTechnologies(int page, int size, String sort, String sortBy) {
+        Sort.Direction direction = sort.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        String sortByField = sortBy.equals("name") ? "name" : "technologyCount";
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(direction, sortByField));
+
+        return capacityRepository.findAllBy(pageRequest).map(capacityMapperI::toEntity);
+    }
+
+    @Override
     public Mono<Capacity> getCapacityByName(String name) {
         return capacityRepository.findByName(name).map(capacityMapperI::toEntity);
     }

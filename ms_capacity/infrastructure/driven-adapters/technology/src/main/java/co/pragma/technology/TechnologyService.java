@@ -1,5 +1,6 @@
 package co.pragma.technology;
 
+import co.pragma.model.technology_capacity.TechnologyIdName;
 import co.pragma.model.technology_capacity.gateway.TechnologyCapacityGateway;
 import co.pragma.utils.integration.input.TechnologyCapacityRequest;
 import co.pragma.model.technology_capacity.TechnologyIds;
@@ -41,7 +42,7 @@ public class TechnologyService implements TechnologyCapacityGateway {
     }
 
     @Override
-    public Flux<Long> getTechnologiesByCapacityId(Long capacityId) {
+    public Flux<TechnologyIdName> getTechnologiesByCapacityId(Long capacityId) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(TECHNOLOGY_CAPACITY_URI_CONTROLLER + "/get-technologies-by-capacity-id")
@@ -49,6 +50,6 @@ public class TechnologyService implements TechnologyCapacityGateway {
                         .build()
                 )
                 .retrieve()
-                .bodyToFlux(Long.class);
+                .bodyToFlux(TechnologyIdName.class);
     }
 }
