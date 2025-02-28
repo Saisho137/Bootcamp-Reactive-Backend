@@ -2,7 +2,7 @@ server:
   port: 8444
 spring:
   application:
-    name: "ms-technology"
+    name: "ms_capacity"
   devtools:
     add-properties: false
   main:
