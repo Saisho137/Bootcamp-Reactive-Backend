@@ -1,0 +1,16 @@
+server:
+  port: 8445
+spring:
+  application:
+    name: "ms_bootcamp"
+  devtools:
+    add-properties: false
+  main:
+    web-application-type: "reactive"
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/reactive_backend
+logging:
+  level:
+    org.springframework.r2dbc: "DEBUG"
+    web: "DEBUG"
