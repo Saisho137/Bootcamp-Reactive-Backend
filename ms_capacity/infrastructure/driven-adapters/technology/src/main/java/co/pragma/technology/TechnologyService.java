@@ -19,7 +19,6 @@ public class TechnologyService implements TechnologyCapacityGateway {
     private static final String TECHNOLOGY_URI_CONTROLLER = "/api/v1/technology";
     private static final String TECHNOLOGY_CAPACITY_URI_CONTROLLER = "/api/v1/technology-capacity";
 
-
     @Override
     public Mono<Boolean> confirmTechnologies(TechnologyIds technologyIds) {
         return webClient.post()
@@ -38,7 +37,8 @@ public class TechnologyService implements TechnologyCapacityGateway {
                         .capacityId(capacityId)
                         .build())
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .onErrorResume(error -> Mono.error(new RuntimeException(error)));
     }
 
     @Override
