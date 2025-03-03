@@ -19,6 +19,8 @@ public interface CapacityGateway {
 
     Mono<Long> countAllCapacity();
 
+    Mono<Boolean> confirmCapacities(List<Long> capacityIds);
+
     Mono<Capacity> getCapacityById(Long id);
 
     Mono<Void> deleteCapacityById(Long id);

@@ -6,6 +6,7 @@ import co.pragma.exceptions.TechnologiesNotFoundException;
 import co.pragma.model.capacity.Capacity;
 import co.pragma.model.capacity.CapacityRequest;
 import co.pragma.model.capacity.gateway.CapacityGateway;
+import co.pragma.model.technology_capacity.CapacityIds;
 import co.pragma.model.technology_capacity.CapacityWithTechnologies;
 import co.pragma.model.technology_capacity.TechnologyIds;
 import co.pragma.model.technology_capacity.gateway.TechnologyCapacityGateway;
@@ -112,6 +113,10 @@ public class CapacityUseCase {
 
     public Mono<Long> countAllCapacity() {
         return capacityGateway.countAllCapacity();
+    }
+
+    public Mono<Boolean> confirmCapacities(CapacityIds capacityIds) {
+        return capacityGateway.confirmCapacities(capacityIds.getIds());
     }
 
     public Mono<Capacity> getCapacityById(Long id) {

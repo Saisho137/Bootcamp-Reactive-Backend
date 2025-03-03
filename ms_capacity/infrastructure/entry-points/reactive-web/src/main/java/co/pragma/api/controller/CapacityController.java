@@ -5,6 +5,7 @@ import co.pragma.api.handler.CapacityPaginatedHandler;
 import co.pragma.api.handler.CapacityTechnologiesPaginatedHandler;
 import co.pragma.model.capacity.Capacity;
 import co.pragma.model.capacity.CapacityRequest;
+import co.pragma.model.technology_capacity.CapacityIds;
 import co.pragma.model.technology_capacity.CapacityWithTechnologies;
 import co.pragma.utils.integration.output.CapacityPaginated;
 import co.pragma.utils.integration.output.PagedResponse;
@@ -43,5 +44,10 @@ public class CapacityController {
     @PostMapping(value = "/save-capacity")
     public Mono<OutputObjectApi<Capacity>> saveCapacity(@RequestBody CapacityRequest request) {
         return capacityHandler.saveCapacity(request);
+    }
+
+    @PostMapping(value = "/verify-capacities")
+    public Mono<Boolean> verifyCapacities(@RequestBody CapacityIds technologyIds) {
+        return capacityHandler.confirmCapacities(technologyIds);
     }
 }

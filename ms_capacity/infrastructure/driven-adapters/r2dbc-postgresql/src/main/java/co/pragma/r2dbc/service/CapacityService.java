@@ -55,6 +55,11 @@ public class CapacityService implements CapacityGateway {
     }
 
     @Override
+    public Mono<Boolean> confirmCapacities(List<Long> capacityIds) {
+        return capacityRepository.findAllById(capacityIds).count().map(count -> count == capacityIds.size());
+    }
+
+    @Override
     public Mono<Capacity> getCapacityById(Long id) {
         return capacityRepository.findById(id).map(capacityMapperI::toEntity);
     }
