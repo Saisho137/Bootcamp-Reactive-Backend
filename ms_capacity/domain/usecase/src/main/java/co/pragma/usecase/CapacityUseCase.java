@@ -45,8 +45,16 @@ public class CapacityUseCase {
                 );
     }
 
-    public Flux<Capacity> getAllCapacityByIds(List<Long> ids) {
-        return capacityGateway.getAllCapacityByIds(ids);
+    public Flux<CapacityWithTechnologies> getAllCapacityWithTechnologiesByIds(List<Long> ids) {
+        return capacityGateway.getAllCapacityByIds(ids)
+                .flatMap(capacity -> technologyCapacityGateway.getTechnologiesByCapacityId(capacity.getId())
+                        .collectList()
+                        .map(technologies -> CapacityWithTechnologies.builder()
+                                .capacity(capacity)
+                                .technologies(technologies)
+                                .build()
+                        )
+                );
     }
 
     public Mono<Capacity> saveCapacity(CapacityRequest capacity) {
@@ -117,10 +125,6 @@ public class CapacityUseCase {
 
     public Mono<Boolean> confirmCapacities(CapacityIds capacityIds) {
         return capacityGateway.confirmCapacities(capacityIds.getIds());
-    }
-
-    public Mono<Capacity> getCapacityById(Long id) {
-        return capacityGateway.getCapacityById(id);
     }
 
     public Mono<Void> deleteCapacityById(Long id) {

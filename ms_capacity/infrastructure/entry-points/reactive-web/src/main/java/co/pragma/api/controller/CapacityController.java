@@ -12,6 +12,7 @@ import co.pragma.utils.integration.output.PagedResponse;
 import co.pragma.utils.output_object.OutputObjectApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -21,6 +22,11 @@ public class CapacityController {
     private final CapacityHandler capacityHandler;
     private final CapacityPaginatedHandler capacityPaginatedHandler;
     private final CapacityTechnologiesPaginatedHandler capacityTechnologiesPaginatedHandler;
+
+    @PostMapping(value = "/get-capacities-and-technologies")
+    public Flux<CapacityWithTechnologies> getCapacitiesAndTechnologies(@RequestBody CapacityIds ids) {
+        return capacityHandler.getAllCapacityWithTechnologies(ids);
+    }
 
     @GetMapping(value = "/get-all-capacities")
     public Mono<OutputObjectApi<PagedResponse<CapacityWithTechnologies>>> getAllCapacities(
@@ -50,4 +56,5 @@ public class CapacityController {
     public Mono<Boolean> verifyCapacities(@RequestBody CapacityIds capacityIds) {
         return capacityHandler.confirmCapacities(capacityIds);
     }
+
 }
