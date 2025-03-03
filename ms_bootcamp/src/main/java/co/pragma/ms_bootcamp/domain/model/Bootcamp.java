@@ -6,14 +6,17 @@ public class Bootcamp {
     private String id;
     private String name;
     private String description;
+    private int capacitiesCount;
     private List<Long> capacitiesIds;
 
-    public Bootcamp(String id, String name, String description, List<Long> capacitiesIds) {
+    public Bootcamp(String id, String name, String description, int capacitiesCount, List<Long> capacitiesIds) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.capacitiesCount = capacitiesCount;
         this.capacitiesIds = capacitiesIds;
     }
+
     public Bootcamp() {
     }
 
@@ -41,6 +44,14 @@ public class Bootcamp {
         this.description = description;
     }
 
+    public int getCapacitiesCount() {
+        return capacitiesCount;
+    }
+
+    public void setCapacitiesCount(int capacitiesCount) {
+        this.capacitiesCount = capacitiesCount;
+    }
+
     public List<Long> getCapacitiesIds() {
         return capacitiesIds;
     }
@@ -57,6 +68,7 @@ public class Bootcamp {
         private String id;
         private String name;
         private String description;
+        private int capacitiesCount;
         private List<Long> capacitiesIds;
 
         public BootcampBuilder id(String id) {
@@ -74,13 +86,18 @@ public class Bootcamp {
             return this;
         }
 
+        public BootcampBuilder capacitiesCount(int capacitiesCount) {
+            this.capacitiesCount = capacitiesCount;
+            return this;
+        }
+
         public BootcampBuilder capacitiesIds(List<Long> capacitiesIds) {
             this.capacitiesIds = capacitiesIds;
             return this;
         }
 
         public Bootcamp build() {
-            return new Bootcamp(id, name, description, capacitiesIds);
+            return new Bootcamp(id, name, description, capacitiesCount, capacitiesIds);
         }
     }
 }

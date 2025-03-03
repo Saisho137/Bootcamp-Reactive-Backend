@@ -14,6 +14,7 @@ public class BootcampMapper implements BootcampMapperI {
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .capacitiesCount(entity.getCapacitiesCount())
                 .capacitiesIds(entity.getCapacitiesIds())
                 .build();
     }
@@ -27,6 +28,7 @@ public class BootcampMapper implements BootcampMapperI {
                 .id(domainEntity.getId())
                 .name(domainEntity.getName())
                 .description(domainEntity.getDescription())
+                .capacitiesCount(domainEntity.getCapacitiesCount())
                 .capacitiesIds(domainEntity.getCapacitiesIds())
                 .build();
     }

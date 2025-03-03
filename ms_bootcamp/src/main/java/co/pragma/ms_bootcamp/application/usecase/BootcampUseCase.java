@@ -46,9 +46,7 @@ public class BootcampUseCase implements BootcampPort {
                 .flatMap(confirmed -> {
                     if (Boolean.FALSE.equals(confirmed)) {
                         return Mono.error(
-                                new CapacityNotFoundException(
-                                        BootcampErrorMessage.CAPACITIES_NOT_FOUND.getMessage()
-                                )
+                                new CapacityNotFoundException(BootcampErrorMessage.CAPACITIES_NOT_FOUND.getMessage())
                         );
                     }
 
@@ -61,28 +59,26 @@ public class BootcampUseCase implements BootcampPort {
 
                                 if (updatedCapacities.size() > 4) {
                                     return Mono.error(
-                                            new CapacityAmountException(
-                                                    BootcampErrorMessage.CAPACITIES_EXCEED_LIMIT.getMessage()
-                                            )
+                                            new CapacityAmountException(BootcampErrorMessage.CAPACITIES_EXCEED_LIMIT.getMessage())
                                     );
                                 }
 
                                 if (updatedCapacities.equals(existingBootcamp.getCapacitiesIds())) {
                                     return Mono.error(
-                                            new CapacityAlreadyAssociatedException(
-                                                    BootcampErrorMessage.CAPACITIES_ALREADY_ASSOCIATED.getMessage()
-                                            )
+                                            new CapacityAlreadyAssociatedException(BootcampErrorMessage.CAPACITIES_ALREADY_ASSOCIATED.getMessage())
                                     );
                                 }
 
                                 existingBootcamp.setCapacitiesIds(updatedCapacities);
+                                existingBootcamp.setCapacitiesCount(updatedCapacities.size());
                                 return bootcampPersistencePort.saveBootcamp(existingBootcamp);
 
                             }).switchIfEmpty(
                                     bootcampPersistencePort.saveBootcamp(Bootcamp.builder()
                                             .name(bootcamp.getName())
                                             .description(bootcamp.getDescription())
-                                            .capacitiesIds(bootcamp.getCapacitiesIds())
+                                            .capacitiesCount(uniqueIds.size())
+                                            .capacitiesIds(uniqueIds)
                                             .build())
                             );
                 });
