@@ -47,7 +47,7 @@ public class CapacityController {
     }
 
     @PostMapping(value = "/verify-capacities")
-    public Mono<Boolean> verifyCapacities(@RequestBody CapacityIds technologyIds) {
-        return capacityHandler.confirmCapacities(technologyIds);
+    public Mono<Boolean> verifyCapacities(@RequestBody CapacityIds capacityIds) {
+        return capacityHandler.confirmCapacities(capacityIds);
     }
 }
