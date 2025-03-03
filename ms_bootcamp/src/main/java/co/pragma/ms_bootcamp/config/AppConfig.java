@@ -10,6 +10,7 @@ import co.pragma.ms_bootcamp.infrastructure.adapter.persistence.mapper.BootcampM
 import co.pragma.ms_bootcamp.infrastructure.adapter.persistence.repository.BootcampRepository;
 import co.pragma.ms_bootcamp.infrastructure.adapter.web.client.CapacityClientAdapter;
 import co.pragma.ms_bootcamp.infrastructure.adapter.web.handler.BootcampHandler;
+import co.pragma.ms_bootcamp.infrastructure.adapter.web.handler.BootcampWithChildrenHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -40,4 +41,8 @@ public class AppConfig {
         return new BootcampHandler(bootcampPort);
     }
 
+    @Bean
+    public BootcampWithChildrenHandler bootcampWithChildrenHandler(BootcampPort bootcampPort) {
+        return new BootcampWithChildrenHandler(bootcampPort);
+    }
 }

@@ -8,9 +8,11 @@ import co.pragma.ms_bootcamp.domain.exceptions.CapacityAmountException;
 import co.pragma.ms_bootcamp.domain.exceptions.CapacityDuplicationException;
 import co.pragma.ms_bootcamp.domain.exceptions.CapacityNotFoundException;
 import co.pragma.ms_bootcamp.domain.model.Bootcamp;
+import co.pragma.ms_bootcamp.domain.model.BootcampWithChildren;
 import co.pragma.ms_bootcamp.domain.port.input.BootcampPort;
 import co.pragma.ms_bootcamp.domain.port.output.BootcampPersistencePort;
 import co.pragma.ms_bootcamp.domain.port.output.CapacityClientPort;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -83,4 +85,24 @@ public class BootcampUseCase implements BootcampPort {
                             );
                 });
     }
+
+    @Override
+    public Flux<BootcampWithChildren> getAllBootcamps(int page, int size, String sort, String sortBy) {
+        return bootcampPersistencePort.getAllBootcamps(page, size, sort, sortBy)
+                .flatMapSequential(bootcamp ->
+                        capacityClientPort.getCapacitiesAndTechnologies(bootcamp.getCapacitiesIds())
+                                .collectList()
+                                .map(capacitiesList -> BootcampWithChildren.builder()
+                                        .bootcamp(bootcamp)
+                                        .capacities(capacitiesList)
+                                        .build()
+                                )
+                );
+    }
+
+    @Override
+    public Mono<Long> countAllBootcamps() {
+        return bootcampPersistencePort.countAllBootcamps();
+    }
+
 }
