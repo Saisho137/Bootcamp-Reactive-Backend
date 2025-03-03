@@ -4,10 +4,12 @@ import co.pragma.ms_bootcamp.domain.enums.BootcampResponseMessage;
 import co.pragma.ms_bootcamp.domain.model.BootcampWithChildren;
 import co.pragma.ms_bootcamp.domain.port.input.BootcampPort;
 import co.pragma.ms_bootcamp.infrastructure.utils.AbstractOutputObjectApi;
-import co.pragma.ms_bootcamp.infrastructure.utils.OutputObjectApi;
 import co.pragma.ms_bootcamp.infrastructure.utils.PagedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -16,20 +18,33 @@ import java.util.List;
 public class BootcampWithChildrenHandler extends AbstractOutputObjectApi<PagedResponse<BootcampWithChildren>> {
     private final BootcampPort bootcampPort;
 
-    public Mono<OutputObjectApi<PagedResponse<BootcampWithChildren>>> getAllBootcamps(int page, int size, String sort, String sortBy) {
+    public Mono<ServerResponse> getAllBootcamps(ServerRequest request) {
+        int page = Integer.parseInt(request.queryParam("page").orElse("0"));
+        int size = Integer.parseInt(request.queryParam("size").orElse("10"));
+        String sort = request.queryParam("sort").orElse("asc");
+        String sortBy = request.queryParam("sortBy").orElse("name");
+
         return bootcampPort.getAllBootcamps(page, size, sort, sortBy)
                 .collectList()
-                .flatMap(list -> bootcampPort.countAllBootcamps().map(total -> {
-                    int totalPages = (int) Math.ceil((double) total / size);
-                    List<BootcampWithChildren> content = list.stream().toList();
+                .flatMap(list ->
+                        bootcampPort.countAllBootcamps()
+                                .flatMap(total -> {
+                                    int totalPages = (int) Math.ceil((double) total / size);
+                                    List<BootcampWithChildren> content = list.stream().toList();
 
-                    return createOutputObjectApi(PagedResponse.<BootcampWithChildren>builder()
-                            .pageSize(size)
-                            .totalPages(totalPages)
-                            .currentPage(page)
-                            .totalElements(total.intValue())
-                            .items(content)
-                            .build(), HttpStatus.OK.value(), BootcampResponseMessage.BOOTCAMP_QUERY.getMessage());
-                }));
+                                    return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(
+                                            createOutputObjectApi(
+                                                    PagedResponse.<BootcampWithChildren>builder()
+                                                            .pageSize(size)
+                                                            .totalPages(totalPages)
+                                                            .currentPage(page)
+                                                            .totalElements(total.intValue())
+                                                            .items(content)
+                                                            .build(),
+                                                    HttpStatus.OK.value(),
+                                                    BootcampResponseMessage.BOOTCAMP_QUERY.getMessage()
+                                            )
+                                    );
+                                }));
     }
 }
