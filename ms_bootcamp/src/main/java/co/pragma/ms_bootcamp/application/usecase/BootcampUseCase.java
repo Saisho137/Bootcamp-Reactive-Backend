@@ -29,61 +29,19 @@ public class BootcampUseCase implements BootcampPort {
 
     @Override
     public Mono<Bootcamp> saveBootcamp(BootcampRequest bootcamp) {
-        List<Long> uniqueIds = bootcamp.getCapacitiesIds().stream().distinct().toList();
-
-        if (uniqueIds.size() != bootcamp.getCapacitiesIds().size()) {
-            return Mono.error(
-                    new CapacityDuplicationException(BootcampErrorMessage.CAPACITIES_DUPLICATED.getMessage())
-            );
-        }
-
-        if (uniqueIds.isEmpty() || uniqueIds.size() > 4) {
-            return Mono.error(
-                    new CapacityAmountException(BootcampErrorMessage.CAPACITIES_AMOUNT_INVALID.getMessage())
-            );
-        }
-
-        return capacityClientPort.confirmCapacities(
-                        CapacityIdList.builder().ids(uniqueIds).build())
-                .flatMap(confirmed -> {
-                    if (Boolean.FALSE.equals(confirmed)) {
-                        return Mono.error(
-                                new CapacityNotFoundException(BootcampErrorMessage.CAPACITIES_NOT_FOUND.getMessage())
-                        );
-                    }
-
-                    return bootcampPersistencePort.getBootcampByName(bootcamp.getName())
-                            .flatMap(existingBootcamp -> {
-                                List<Long> updatedCapacities = Stream.concat(
-                                        existingBootcamp.getCapacitiesIds().stream(),
-                                        uniqueIds.stream()
-                                ).distinct().toList();
-
-                                if (updatedCapacities.size() > 4) {
-                                    return Mono.error(
-                                            new CapacityAmountException(BootcampErrorMessage.CAPACITIES_EXCEED_LIMIT.getMessage())
-                                    );
-                                }
-
-                                if (updatedCapacities.equals(existingBootcamp.getCapacitiesIds())) {
-                                    return Mono.error(
-                                            new CapacityAlreadyAssociatedException(BootcampErrorMessage.CAPACITIES_ALREADY_ASSOCIATED.getMessage())
-                                    );
-                                }
-
-                                existingBootcamp.setCapacitiesIds(updatedCapacities);
-                                existingBootcamp.setCapacitiesCount(updatedCapacities.size());
-                                return bootcampPersistencePort.saveBootcamp(existingBootcamp);
-
-                            }).switchIfEmpty(
-                                    bootcampPersistencePort.saveBootcamp(Bootcamp.builder()
-                                            .name(bootcamp.getName())
-                                            .description(bootcamp.getDescription())
-                                            .capacitiesCount(uniqueIds.size())
-                                            .capacitiesIds(uniqueIds)
-                                            .build())
-                            );
-                });
+        return Flux.fromIterable(bootcamp.getCapacitiesIds())
+                .distinct()
+                .collectList()
+                .flatMap(uniqueIds ->
+                        validateCapacities(uniqueIds, bootcamp.getCapacitiesIds())
+                                .then(capacityClientPort.confirmCapacities(new CapacityIdList(uniqueIds)))
+                                .flatMap(confirmed -> Boolean.TRUE.equals(confirmed) ?
+                                        bootcampPersistencePort.getBootcampByName(bootcamp.getName())
+                                                .flatMap(existing -> updateExistingBootcamp(existing, uniqueIds))
+                                                .switchIfEmpty(createNewBootcamp(bootcamp, uniqueIds))
+                                        : Mono.error(new CapacityNotFoundException(BootcampErrorMessage.CAPACITIES_NOT_FOUND.getMessage()))
+                                )
+                );
     }
 
     @Override
@@ -103,6 +61,42 @@ public class BootcampUseCase implements BootcampPort {
     @Override
     public Mono<Long> countAllBootcamps() {
         return bootcampPersistencePort.countAllBootcamps();
+    }
+
+    private Mono<Void> validateCapacities(List<Long> uniqueIds, List<Long> originalIds) {
+        return Mono.just(uniqueIds)
+                .filter(ids -> ids.size() == originalIds.size())
+                .switchIfEmpty(Mono.error(new CapacityDuplicationException(BootcampErrorMessage.CAPACITIES_DUPLICATED.getMessage())))
+                .filter(ids -> !ids.isEmpty() && ids.size() <= 4)
+                .switchIfEmpty(Mono.error(new CapacityAmountException(BootcampErrorMessage.CAPACITIES_AMOUNT_INVALID.getMessage())))
+                .then();
+    }
+
+    private Mono<Bootcamp> updateExistingBootcamp(Bootcamp existingBootcamp, List<Long> uniqueIds) {
+        return Mono.just(uniqueIds)
+                .map(ids -> Stream.concat(
+                        existingBootcamp.getCapacitiesIds().stream(),
+                        ids.stream()
+                ).distinct().toList())
+                .filter(updatedCapacities -> updatedCapacities.size() <= 4)
+                .switchIfEmpty(Mono.error(new CapacityAmountException(BootcampErrorMessage.CAPACITIES_EXCEED_LIMIT.getMessage())))
+                .filter(updatedCapacities -> !updatedCapacities.equals(existingBootcamp.getCapacitiesIds()))
+                .switchIfEmpty(Mono.error(new CapacityAlreadyAssociatedException(BootcampErrorMessage.CAPACITIES_ALREADY_ASSOCIATED.getMessage())))
+                .flatMap(updatedCapacities -> {
+                    existingBootcamp.setCapacitiesIds(updatedCapacities);
+                    existingBootcamp.setCapacitiesCount(updatedCapacities.size());
+                    return bootcampPersistencePort.saveBootcamp(existingBootcamp);
+                });
+    }
+
+    private Mono<Bootcamp> createNewBootcamp(BootcampRequest bootcamp, List<Long> uniqueIds) {
+        return bootcampPersistencePort.saveBootcamp(
+                Bootcamp.builder()
+                        .name(bootcamp.getName())
+                        .description(bootcamp.getDescription())
+                        .capacitiesCount(uniqueIds.size())
+                        .capacitiesIds(uniqueIds)
+                        .build());
     }
 
 }
