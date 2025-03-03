@@ -3,12 +3,12 @@ package co.pragma.ms_bootcamp.domain.model;
 import java.util.List;
 
 public class Bootcamp {
-    private Long id;
+    private String id;
     private String name;
     private String description;
     private List<Long> capacitiesIds;
 
-    public Bootcamp(Long id, String name, String description, List<Long> capacitiesIds) {
+    public Bootcamp(String id, String name, String description, List<Long> capacitiesIds) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -17,11 +17,11 @@ public class Bootcamp {
     public Bootcamp() {
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -54,12 +54,12 @@ public class Bootcamp {
     }
 
     public static class BootcampBuilder {
-        private Long id;
+        private String id;
         private String name;
         private String description;
         private List<Long> capacitiesIds;
 
-        public BootcampBuilder id(Long id) {
+        public BootcampBuilder id(String id) {
             this.id = id;
             return this;
         }
