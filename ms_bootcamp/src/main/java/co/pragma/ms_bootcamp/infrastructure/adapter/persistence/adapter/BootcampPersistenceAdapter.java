@@ -17,4 +17,10 @@ public class BootcampPersistenceAdapter implements BootcampPersistencePort {
         return bootcampRepository.save(bootcampMapper.toEntity(bootcamp))
                 .map(bootcampMapper::toDomainEntity);
     }
+
+    @Override
+    public Mono<Bootcamp> getBootcampByName(String name) {
+        return bootcampRepository.findByName(name)
+                .map(bootcampMapper::toDomainEntity);
+    }
 }
