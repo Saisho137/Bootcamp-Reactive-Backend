@@ -12,8 +12,6 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 public class BootcampWithChildrenHandler extends AbstractOutputObjectApi<PagedResponse<BootcampWithChildren>> {
     private final BootcampPort bootcampPort;
@@ -24,27 +22,28 @@ public class BootcampWithChildrenHandler extends AbstractOutputObjectApi<PagedRe
         String sort = request.queryParam("sort").orElse("asc");
         String sortBy = request.queryParam("sortBy").orElse("name");
 
-        return bootcampPort.getAllBootcamps(page, size, sort, sortBy)
-                .collectList()
-                .flatMap(list ->
-                        bootcampPort.countAllBootcamps()
-                                .flatMap(total -> {
-                                    int totalPages = (int) Math.ceil((double) total / size);
-                                    List<BootcampWithChildren> content = list.stream().toList();
+        return bootcampPort.countAllBootcamps()
+                .flatMap(total -> {
+                    int totalPages = (int) Math.ceil((double) total / size);
 
-                                    return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(
-                                            createOutputObjectApi(
+                    return ServerResponse.ok()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue(
+                                    bootcampPort.getAllBootcamps(page, size, sort, sortBy)
+                                            .collectList()
+                                            .map(items -> createOutputObjectApi(
                                                     PagedResponse.<BootcampWithChildren>builder()
                                                             .pageSize(size)
                                                             .totalPages(totalPages)
                                                             .currentPage(page)
                                                             .totalElements(total.intValue())
-                                                            .items(content)
+                                                            .items(items)
                                                             .build(),
                                                     HttpStatus.OK.value(),
                                                     BootcampResponseMessage.BOOTCAMP_QUERY.getMessage()
-                                            )
-                                    );
-                                }));
+                                            ))
+                            );
+                });
     }
+
 }
