@@ -1,6 +1,6 @@
-package co.pragma.ms_bootcamp.config;
+package co.pragma.ms_bootcamp.application.config;
 
-import co.pragma.ms_bootcamp.application.usecase.BootcampUseCase;
+import co.pragma.ms_bootcamp.domain.usecase.BootcampUseCase;
 import co.pragma.ms_bootcamp.domain.port.input.BootcampPort;
 import co.pragma.ms_bootcamp.domain.port.output.BootcampPersistencePort;
 import co.pragma.ms_bootcamp.domain.port.output.CapacityClientPort;
@@ -8,9 +8,9 @@ import co.pragma.ms_bootcamp.infrastructure.adapter.persistence.adapter.Bootcamp
 import co.pragma.ms_bootcamp.infrastructure.adapter.persistence.mapper.BootcampMapper;
 import co.pragma.ms_bootcamp.infrastructure.adapter.persistence.mapper.BootcampMapperI;
 import co.pragma.ms_bootcamp.infrastructure.adapter.persistence.repository.BootcampRepository;
-import co.pragma.ms_bootcamp.infrastructure.adapter.web.client.CapacityClientAdapter;
-import co.pragma.ms_bootcamp.infrastructure.adapter.web.handler.BootcampHandler;
-import co.pragma.ms_bootcamp.infrastructure.adapter.web.handler.BootcampWithChildrenHandler;
+import co.pragma.ms_bootcamp.infrastructure.entrypoints.client.CapacityClientAdapter;
+import co.pragma.ms_bootcamp.infrastructure.entrypoints.handler.BootcampHandler;
+import co.pragma.ms_bootcamp.infrastructure.entrypoints.handler.BootcampWithChildrenHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;

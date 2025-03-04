@@ -1,6 +1,6 @@
 package co.pragma.ms_bootcamp.domain.port.output;
 
-import co.pragma.ms_bootcamp.application.dto.CapacityIdList;
+import co.pragma.ms_bootcamp.domain.model.dto.CapacityIdList;
 import co.pragma.ms_bootcamp.domain.model.integration.CapacityWithTechnologies;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

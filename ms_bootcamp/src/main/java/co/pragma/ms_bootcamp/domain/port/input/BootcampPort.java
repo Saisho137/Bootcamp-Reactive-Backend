@@ -1,6 +1,6 @@
 package co.pragma.ms_bootcamp.domain.port.input;
 
-import co.pragma.ms_bootcamp.application.dto.BootcampRequest;
+import co.pragma.ms_bootcamp.domain.model.dto.BootcampRequest;
 import co.pragma.ms_bootcamp.domain.model.Bootcamp;
 import co.pragma.ms_bootcamp.domain.model.BootcampWithChildren;
 import reactor.core.publisher.Flux;
