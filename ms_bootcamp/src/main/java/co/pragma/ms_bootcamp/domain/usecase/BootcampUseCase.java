@@ -1,7 +1,7 @@
-package co.pragma.ms_bootcamp.application.usecase;
+package co.pragma.ms_bootcamp.domain.usecase;
 
-import co.pragma.ms_bootcamp.application.dto.BootcampRequest;
-import co.pragma.ms_bootcamp.application.dto.CapacityIdList;
+import co.pragma.ms_bootcamp.domain.model.dto.BootcampRequest;
+import co.pragma.ms_bootcamp.domain.model.dto.CapacityIdList;
 import co.pragma.ms_bootcamp.domain.enums.BootcampErrorMessage;
 import co.pragma.ms_bootcamp.domain.exceptions.CapacityAlreadyAssociatedException;
 import co.pragma.ms_bootcamp.domain.exceptions.CapacityAmountException;

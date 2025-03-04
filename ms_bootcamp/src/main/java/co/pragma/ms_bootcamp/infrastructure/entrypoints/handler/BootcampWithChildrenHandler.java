@@ -1,4 +1,4 @@
-package co.pragma.ms_bootcamp.infrastructure.adapter.web.handler;
+package co.pragma.ms_bootcamp.infrastructure.entrypoints.handler;
 
 import co.pragma.ms_bootcamp.domain.enums.BootcampResponseMessage;
 import co.pragma.ms_bootcamp.domain.model.BootcampWithChildren;

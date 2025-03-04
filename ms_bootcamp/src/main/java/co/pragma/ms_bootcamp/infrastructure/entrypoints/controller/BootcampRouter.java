@@ -1,7 +1,7 @@
-package co.pragma.ms_bootcamp.infrastructure.adapter.web.controller;
+package co.pragma.ms_bootcamp.infrastructure.entrypoints.controller;
 
-import co.pragma.ms_bootcamp.infrastructure.adapter.web.handler.BootcampHandler;
-import co.pragma.ms_bootcamp.infrastructure.adapter.web.handler.BootcampWithChildrenHandler;
+import co.pragma.ms_bootcamp.infrastructure.entrypoints.handler.BootcampHandler;
+import co.pragma.ms_bootcamp.infrastructure.entrypoints.handler.BootcampWithChildrenHandler;
 import co.pragma.ms_bootcamp.infrastructure.utils.constants.ApiPaths;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
-public class BootcampController {
+public class BootcampRouter {
 
     @Bean
     public RouterFunction<ServerResponse> bootcampRoutes(BootcampHandler bootcampHandler, BootcampWithChildrenHandler bootcampWithChildrenHandler) {

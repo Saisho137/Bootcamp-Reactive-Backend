@@ -1,6 +1,6 @@
-package co.pragma.ms_bootcamp.infrastructure.adapter.web.handler;
+package co.pragma.ms_bootcamp.infrastructure.entrypoints.handler;
 
-import co.pragma.ms_bootcamp.application.dto.BootcampRequest;
+import co.pragma.ms_bootcamp.domain.model.dto.BootcampRequest;
 import co.pragma.ms_bootcamp.domain.enums.BootcampResponseMessage;
 import co.pragma.ms_bootcamp.domain.model.Bootcamp;
 import co.pragma.ms_bootcamp.domain.port.input.BootcampPort;

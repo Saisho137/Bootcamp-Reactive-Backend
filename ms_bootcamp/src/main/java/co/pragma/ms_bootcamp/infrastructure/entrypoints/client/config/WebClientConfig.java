@@ -1,4 +1,4 @@
-package co.pragma.ms_bootcamp.infrastructure.adapter.web.client.config;
+package co.pragma.ms_bootcamp.infrastructure.entrypoints.client.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

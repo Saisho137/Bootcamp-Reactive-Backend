@@ -1,4 +1,4 @@
-package co.pragma.ms_bootcamp.infrastructure.adapter.web.controller.advisor;
+package co.pragma.ms_bootcamp.infrastructure.entrypoints.controller.advisor;
 
 import co.pragma.ms_bootcamp.domain.exceptions.CapacityAlreadyAssociatedException;
 import co.pragma.ms_bootcamp.domain.exceptions.CapacityAmountException;
@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 
 @ControllerAdvice
-public class BootcampControllerAdvisor extends AbstractOutputObjectApi<Void> {
+public class BootcampRouterAdvisor extends AbstractOutputObjectApi<Void> {
     @ExceptionHandler(CapacityAmountException.class)
     public Mono<ResponseEntity<OutputObjectApi<Void>>> handleCapacityAmountException(CapacityAmountException exception) {
         return Mono.just(ResponseEntity

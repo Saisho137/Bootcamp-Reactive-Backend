@@ -1,6 +1,6 @@
-package co.pragma.ms_bootcamp.infrastructure.adapter.web.client;
+package co.pragma.ms_bootcamp.infrastructure.entrypoints.client;
 
-import co.pragma.ms_bootcamp.application.dto.CapacityIdList;
+import co.pragma.ms_bootcamp.domain.model.dto.CapacityIdList;
 import co.pragma.ms_bootcamp.domain.model.integration.CapacityWithTechnologies;
 import co.pragma.ms_bootcamp.domain.port.output.CapacityClientPort;
 import co.pragma.ms_bootcamp.infrastructure.utils.constants.WebClientEndpoints;
