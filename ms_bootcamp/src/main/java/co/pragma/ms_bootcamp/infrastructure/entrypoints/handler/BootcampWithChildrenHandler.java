@@ -26,22 +26,22 @@ public class BootcampWithChildrenHandler extends AbstractOutputObjectApi<PagedRe
                 .flatMap(total -> {
                     int totalPages = (int) Math.ceil((double) total / size);
 
-                    return ServerResponse.ok()
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .bodyValue(
-                                    bootcampPort.getAllBootcamps(page, size, sort, sortBy)
-                                            .collectList()
-                                            .map(items -> createOutputObjectApi(
-                                                    PagedResponse.<BootcampWithChildren>builder()
-                                                            .pageSize(size)
-                                                            .totalPages(totalPages)
-                                                            .currentPage(page)
-                                                            .totalElements(total.intValue())
-                                                            .items(items)
-                                                            .build(),
-                                                    HttpStatus.OK.value(),
-                                                    BootcampResponseMessage.BOOTCAMP_QUERY.getMessage()
-                                            ))
+                    return bootcampPort.getAllBootcamps(page, size, sort, sortBy)
+                            .collectList()
+                            .map(items -> createOutputObjectApi(
+                                    PagedResponse.<BootcampWithChildren>builder()
+                                            .pageSize(size)
+                                            .totalPages(totalPages)
+                                            .currentPage(page)
+                                            .totalElements(total.intValue())
+                                            .items(items)
+                                            .build(),
+                                    HttpStatus.OK.value(),
+                                    BootcampResponseMessage.BOOTCAMP_QUERY.getMessage()
+                            ))
+                            .flatMap(response -> ServerResponse.ok()
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .bodyValue(response)
                             );
                 });
     }
